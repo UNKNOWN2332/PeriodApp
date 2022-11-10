@@ -1,0 +1,60 @@
+{
+  "applications": "*",
+  "changelogDate": "20221109012118",
+  "clientRootFolder": "PeriodApp",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "period",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "periodName",
+      "fieldType": "String",
+      "fieldValidateRules": ["minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "25",
+      "fieldValidateRulesMinlength": "3"
+    },
+    {
+      "fieldName": "createAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "amount",
+      "fieldType": "Double",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "datesOfPeriod",
+      "fieldType": "DatesOfPeriod",
+      "fieldValues": "Year,HalfYear,Month,HalfMonth,Week,Day"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "PeriodApp",
+  "name": "Period",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "pay",
+      "otherEntityRelationshipName": "periodId",
+      "ownerSide": false,
+      "relationshipName": "payId",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "infoPaid",
+      "otherEntityRelationshipName": "periodId",
+      "ownerSide": false,
+      "relationshipName": "infoPaid",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

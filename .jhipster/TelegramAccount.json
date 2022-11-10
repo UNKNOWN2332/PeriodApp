@@ -1,0 +1,76 @@
+{
+  "applications": "*",
+  "changelogDate": "20221109012116",
+  "clientRootFolder": "PeriodApp",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "telegram_account",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "chatId",
+      "fieldType": "Long",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "username",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "firstname",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastname",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "phoneNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "role",
+      "fieldType": "Role",
+      "fieldValues": "Seller,Receiver"
+    },
+    {
+      "fieldName": "createAt",
+      "fieldType": "Instant"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "PeriodApp",
+  "name": "TelegramAccount",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "pay",
+      "otherEntityRelationshipName": "accId",
+      "ownerSide": false,
+      "relationshipName": "payId",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "groups",
+      "otherEntityRelationshipName": "acc",
+      "relationshipName": "groups",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "infoPaid",
+      "otherEntityRelationshipName": "accId",
+      "ownerSide": false,
+      "relationshipName": "infoPaid",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

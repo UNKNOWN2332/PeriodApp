@@ -1,0 +1,56 @@
+{
+  "applications": "*",
+  "changelogDate": "20221109012117",
+  "clientRootFolder": "PeriodApp",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "pay",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "amount",
+      "fieldType": "Double",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "isPaid",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "paidAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "expiryDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "PeriodApp",
+  "name": "Pay",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "telegramAccount",
+      "otherEntityRelationshipName": "payId",
+      "ownerSide": true,
+      "relationshipName": "accId",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "period",
+      "otherEntityRelationshipName": "payId",
+      "ownerSide": true,
+      "relationshipName": "periodId",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

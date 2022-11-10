@@ -1,0 +1,42 @@
+{
+  "applications": "*",
+  "changelogDate": "20221109012119",
+  "clientRootFolder": "PeriodApp",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "info_paid",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "expiryDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "PeriodApp",
+  "name": "InfoPaid",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "telegramAccount",
+      "otherEntityRelationshipName": "infoPaid",
+      "ownerSide": true,
+      "relationshipName": "accId",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "period",
+      "otherEntityRelationshipName": "infoPaid",
+      "ownerSide": true,
+      "relationshipName": "periodId",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}
