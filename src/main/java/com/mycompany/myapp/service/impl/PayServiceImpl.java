@@ -138,8 +138,8 @@ public class PayServiceImpl implements PayService {
             if (isPaidDTO.getAmount() >= period.getAmount()) {
                 List<Pay> resultPays = collection(isPaidDTO, period, tgAccount, infoPaid.getExpiryDate());
                 infoPaid.setExpiryDate(resultPays.get(resultPays.size() - 1).getExpiryDate());
-                infoPaidRepository.save(infoPaid);
                 payRepository.saveAll(resultPays);
+                infoPaidRepository.save(infoPaid);
                 return new ResponsDTO<>(true, "Ok", "Save");
             }
 
@@ -182,7 +182,8 @@ public class PayServiceImpl implements PayService {
         payOptional.setExpiryDate(payOptional.getExpiryDate().plusSeconds(period.getDatesOfPeriod().getSecond()));
 
         var pays = collection(isPaidDTO, period, tgAccount, payOptional.getExpiryDate());
-        infoPaid.setExpiryDate(pays.get(pays.size() - 1).getExpiryDate());
+        infoPaid.setExpiryDate(payOptional.getExpiryDate());
+        if (pays.size() != 0) infoPaid.setExpiryDate(pays.get(pays.size() - 1).getExpiryDate());
         infoPaidRepository.save(infoPaid);
         payRepository.saveAll(pays);
         return new ResponsDTO<>(true, "OK", "OK");

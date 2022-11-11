@@ -5,11 +5,8 @@ import com.mycompany.myapp.repository.TelegramAccountRepository;
 import com.mycompany.myapp.service.TelegramAccountService;
 import com.mycompany.myapp.service.dto.TelegramAccountDTO;
 import com.mycompany.myapp.service.mapper.TelegramAccountMapper;
-import java.util.LinkedList;
-import java.util.List;
+import java.time.Instant;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -39,6 +36,7 @@ public class TelegramAccountServiceImpl implements TelegramAccountService {
     public TelegramAccountDTO save(TelegramAccountDTO telegramAccountDTO) {
         log.debug("Request to save TelegramAccount : {}", telegramAccountDTO);
         TelegramAccount telegramAccount = telegramAccountMapper.toEntity(telegramAccountDTO);
+        telegramAccount.setCreateAt(Instant.now().plusSeconds(18_000));
         telegramAccount = telegramAccountRepository.save(telegramAccount);
         return telegramAccountMapper.toDto(telegramAccount);
     }
@@ -71,34 +69,6 @@ public class TelegramAccountServiceImpl implements TelegramAccountService {
     public Page<TelegramAccountDTO> findAll(Pageable pageable) {
         log.debug("Request to get all TelegramAccounts");
         return telegramAccountRepository.findAll(pageable).map(telegramAccountMapper::toDto);
-    }
-
-    /**
-     *  Get all the telegramAccounts where PayId is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<TelegramAccountDTO> findAllWherePayIdIsNull() {
-        log.debug("Request to get all telegramAccounts where PayId is null");
-        return StreamSupport
-            .stream(telegramAccountRepository.findAll().spliterator(), false)
-            .filter(telegramAccount -> telegramAccount.getPayId() == null)
-            .map(telegramAccountMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    /**
-     *  Get all the telegramAccounts where InfoPaid is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<TelegramAccountDTO> findAllWhereInfoPaidIsNull() {
-        log.debug("Request to get all telegramAccounts where InfoPaid is null");
-        return StreamSupport
-            .stream(telegramAccountRepository.findAll().spliterator(), false)
-            .filter(telegramAccount -> telegramAccount.getInfoPaid() == null)
-            .map(telegramAccountMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

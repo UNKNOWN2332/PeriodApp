@@ -1,7 +1,6 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.TelegramAccountDTO;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,18 +40,6 @@ public interface TelegramAccountService {
      * @return the list of entities.
      */
     Page<TelegramAccountDTO> findAll(Pageable pageable);
-    /**
-     * Get all the TelegramAccountDTO where PayId is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<TelegramAccountDTO> findAllWherePayIdIsNull();
-    /**
-     * Get all the TelegramAccountDTO where InfoPaid is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<TelegramAccountDTO> findAllWhereInfoPaidIsNull();
 
     /**
      * Get the "id" telegramAccount.

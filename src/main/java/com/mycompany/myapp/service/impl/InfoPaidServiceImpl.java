@@ -5,6 +5,7 @@ import com.mycompany.myapp.repository.InfoPaidRepository;
 import com.mycompany.myapp.service.InfoPaidService;
 import com.mycompany.myapp.service.dto.InfoPaidDTO;
 import com.mycompany.myapp.service.mapper.InfoPaidMapper;
+import java.time.Instant;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ public class InfoPaidServiceImpl implements InfoPaidService {
     public InfoPaidDTO save(InfoPaidDTO infoPaidDTO) {
         log.debug("Request to save InfoPaid : {}", infoPaidDTO);
         InfoPaid infoPaid = infoPaidMapper.toEntity(infoPaidDTO);
+        infoPaid.setExpiryDate(Instant.now().plusSeconds(18_000));
         infoPaid = infoPaidRepository.save(infoPaid);
         return infoPaidMapper.toDto(infoPaid);
     }

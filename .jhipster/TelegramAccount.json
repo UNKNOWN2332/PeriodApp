@@ -56,7 +56,7 @@
       "otherEntityRelationshipName": "accId",
       "ownerSide": false,
       "relationshipName": "payId",
-      "relationshipType": "one-to-one"
+      "relationshipType": "one-to-many"
     },
     {
       "otherEntityName": "groups",
@@ -69,7 +69,7 @@
       "otherEntityRelationshipName": "accId",
       "ownerSide": false,
       "relationshipName": "infoPaid",
-      "relationshipType": "one-to-one"
+      "relationshipType": "one-to-many"
     }
   ],
   "service": "serviceImpl"

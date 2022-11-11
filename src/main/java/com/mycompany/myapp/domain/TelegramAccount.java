@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.myapp.domain.enumeration.Role;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -47,17 +49,19 @@ public class TelegramAccount implements Serializable {
     @Column(name = "create_at")
     private Instant createAt;
 
+    @OneToMany(mappedBy = "accId")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "accId", "periodId" }, allowSetters = true)
-    @OneToOne(mappedBy = "accId")
-    private Pay payId;
+    private Set<Pay> payIds = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "accId" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "accs" }, allowSetters = true)
     private Groups groups;
 
+    @OneToMany(mappedBy = "accId")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "accId", "periodId" }, allowSetters = true)
-    @OneToOne(mappedBy = "accId")
-    private InfoPaid infoPaid;
+    private Set<InfoPaid> infoPaids = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -165,22 +169,34 @@ public class TelegramAccount implements Serializable {
         this.createAt = createAt;
     }
 
-    public Pay getPayId() {
-        return this.payId;
+    public Set<Pay> getPayIds() {
+        return this.payIds;
     }
 
-    public void setPayId(Pay pay) {
-        if (this.payId != null) {
-            this.payId.setAccId(null);
+    public void setPayIds(Set<Pay> pays) {
+        if (this.payIds != null) {
+            this.payIds.forEach(i -> i.setAccId(null));
         }
-        if (pay != null) {
-            pay.setAccId(this);
+        if (pays != null) {
+            pays.forEach(i -> i.setAccId(this));
         }
-        this.payId = pay;
+        this.payIds = pays;
     }
 
-    public TelegramAccount payId(Pay pay) {
-        this.setPayId(pay);
+    public TelegramAccount payIds(Set<Pay> pays) {
+        this.setPayIds(pays);
+        return this;
+    }
+
+    public TelegramAccount addPayId(Pay pay) {
+        this.payIds.add(pay);
+        pay.setAccId(this);
+        return this;
+    }
+
+    public TelegramAccount removePayId(Pay pay) {
+        this.payIds.remove(pay);
+        pay.setAccId(null);
         return this;
     }
 
@@ -197,22 +213,34 @@ public class TelegramAccount implements Serializable {
         return this;
     }
 
-    public InfoPaid getInfoPaid() {
-        return this.infoPaid;
+    public Set<InfoPaid> getInfoPaids() {
+        return this.infoPaids;
     }
 
-    public void setInfoPaid(InfoPaid infoPaid) {
-        if (this.infoPaid != null) {
-            this.infoPaid.setAccId(null);
+    public void setInfoPaids(Set<InfoPaid> infoPaids) {
+        if (this.infoPaids != null) {
+            this.infoPaids.forEach(i -> i.setAccId(null));
         }
-        if (infoPaid != null) {
-            infoPaid.setAccId(this);
+        if (infoPaids != null) {
+            infoPaids.forEach(i -> i.setAccId(this));
         }
-        this.infoPaid = infoPaid;
+        this.infoPaids = infoPaids;
     }
 
-    public TelegramAccount infoPaid(InfoPaid infoPaid) {
-        this.setInfoPaid(infoPaid);
+    public TelegramAccount infoPaids(Set<InfoPaid> infoPaids) {
+        this.setInfoPaids(infoPaids);
+        return this;
+    }
+
+    public TelegramAccount addInfoPaid(InfoPaid infoPaid) {
+        this.infoPaids.add(infoPaid);
+        infoPaid.setAccId(this);
+        return this;
+    }
+
+    public TelegramAccount removeInfoPaid(InfoPaid infoPaid) {
+        this.infoPaids.remove(infoPaid);
+        infoPaid.setAccId(null);
         return this;
     }
 

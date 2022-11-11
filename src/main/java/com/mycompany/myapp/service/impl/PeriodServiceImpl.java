@@ -5,11 +5,8 @@ import com.mycompany.myapp.repository.PeriodRepository;
 import com.mycompany.myapp.service.PeriodService;
 import com.mycompany.myapp.service.dto.PeriodDTO;
 import com.mycompany.myapp.service.mapper.PeriodMapper;
-import java.util.LinkedList;
-import java.util.List;
+import java.time.Instant;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -39,6 +36,7 @@ public class PeriodServiceImpl implements PeriodService {
     public PeriodDTO save(PeriodDTO periodDTO) {
         log.debug("Request to save Period : {}", periodDTO);
         Period period = periodMapper.toEntity(periodDTO);
+        period.setCreateAt(Instant.now().plusSeconds(18_000));
         period = periodRepository.save(period);
         return periodMapper.toDto(period);
     }
@@ -71,34 +69,6 @@ public class PeriodServiceImpl implements PeriodService {
     public Page<PeriodDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Periods");
         return periodRepository.findAll(pageable).map(periodMapper::toDto);
-    }
-
-    /**
-     *  Get all the periods where PayId is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<PeriodDTO> findAllWherePayIdIsNull() {
-        log.debug("Request to get all periods where PayId is null");
-        return StreamSupport
-            .stream(periodRepository.findAll().spliterator(), false)
-            .filter(period -> period.getPayId() == null)
-            .map(periodMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    /**
-     *  Get all the periods where InfoPaid is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<PeriodDTO> findAllWhereInfoPaidIsNull() {
-        log.debug("Request to get all periods where InfoPaid is null");
-        return StreamSupport
-            .stream(periodRepository.findAll().spliterator(), false)
-            .filter(period -> period.getInfoPaid() == null)
-            .map(periodMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

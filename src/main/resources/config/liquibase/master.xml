@@ -20,8 +20,7 @@
     <include file="config/liquibase/changelog/20221109012116_added_entity_constraints_TelegramAccount.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20221109012117_added_entity_constraints_Pay.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20221109012119_added_entity_constraints_InfoPaid.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20221109012117_added_entity_constraints_Period.xml" relativeToChangelogFile="false"/>
-
+    <include file="config/liquibase/changelog/added_column_lastPayId_to_entity_InfoPaid.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

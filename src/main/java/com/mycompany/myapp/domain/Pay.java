@@ -37,12 +37,12 @@ public class Pay implements Serializable {
     @Column(name = "expiry_date")
     private Instant expiryDate;
 
-    @JsonIgnoreProperties(value = { "payId", "groups", "infoPaid" }, allowSetters = true)
-    @OneToOne
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "payIds", "groups", "infoPaids" }, allowSetters = true)
     private TelegramAccount accId;
 
-    @JsonIgnoreProperties(value = { "payId", "infoPaid" }, allowSetters = true)
-    @OneToOne
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "payIds", "infoPaids" }, allowSetters = true)
     private Period periodId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

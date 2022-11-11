@@ -28,14 +28,14 @@
       "otherEntityRelationshipName": "infoPaid",
       "ownerSide": true,
       "relationshipName": "accId",
-      "relationshipType": "one-to-one"
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "period",
       "otherEntityRelationshipName": "infoPaid",
       "ownerSide": true,
       "relationshipName": "periodId",
-      "relationshipType": "one-to-one"
+      "relationshipType": "many-to-one"
     }
   ],
   "service": "serviceImpl"

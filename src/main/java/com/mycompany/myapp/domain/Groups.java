@@ -41,7 +41,7 @@ public class Groups implements Serializable {
 
     @OneToMany(mappedBy = "groups")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "payId", "groups", "infoPaid" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payIds", "groups", "infoPaids" }, allowSetters = true)
     private Set<TelegramAccount> accs = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

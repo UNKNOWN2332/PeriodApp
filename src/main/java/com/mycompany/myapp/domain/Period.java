@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mycompany.myapp.domain.enumeration.DatesOfPeriod;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -40,13 +42,15 @@ public class Period implements Serializable {
     @Column(name = "dates_of_period")
     private DatesOfPeriod datesOfPeriod;
 
+    @OneToMany(mappedBy = "periodId")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "accId", "periodId" }, allowSetters = true)
-    @OneToOne(mappedBy = "periodId")
-    private Pay payId;
+    private Set<Pay> payIds = new HashSet<>();
 
+    @OneToMany(mappedBy = "periodId")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "accId", "periodId" }, allowSetters = true)
-    @OneToOne(mappedBy = "periodId")
-    private InfoPaid infoPaid;
+    private Set<InfoPaid> infoPaids = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -115,41 +119,65 @@ public class Period implements Serializable {
         this.datesOfPeriod = datesOfPeriod;
     }
 
-    public Pay getPayId() {
-        return this.payId;
+    public Set<Pay> getPayIds() {
+        return this.payIds;
     }
 
-    public void setPayId(Pay pay) {
-        if (this.payId != null) {
-            this.payId.setPeriodId(null);
+    public void setPayIds(Set<Pay> pays) {
+        if (this.payIds != null) {
+            this.payIds.forEach(i -> i.setPeriodId(null));
         }
-        if (pay != null) {
-            pay.setPeriodId(this);
+        if (pays != null) {
+            pays.forEach(i -> i.setPeriodId(this));
         }
-        this.payId = pay;
+        this.payIds = pays;
     }
 
-    public Period payId(Pay pay) {
-        this.setPayId(pay);
+    public Period payIds(Set<Pay> pays) {
+        this.setPayIds(pays);
         return this;
     }
 
-    public InfoPaid getInfoPaid() {
-        return this.infoPaid;
+    public Period addPayId(Pay pay) {
+        this.payIds.add(pay);
+        pay.setPeriodId(this);
+        return this;
     }
 
-    public void setInfoPaid(InfoPaid infoPaid) {
-        if (this.infoPaid != null) {
-            this.infoPaid.setPeriodId(null);
-        }
-        if (infoPaid != null) {
-            infoPaid.setPeriodId(this);
-        }
-        this.infoPaid = infoPaid;
+    public Period removePayId(Pay pay) {
+        this.payIds.remove(pay);
+        pay.setPeriodId(null);
+        return this;
     }
 
-    public Period infoPaid(InfoPaid infoPaid) {
-        this.setInfoPaid(infoPaid);
+    public Set<InfoPaid> getInfoPaids() {
+        return this.infoPaids;
+    }
+
+    public void setInfoPaids(Set<InfoPaid> infoPaids) {
+        if (this.infoPaids != null) {
+            this.infoPaids.forEach(i -> i.setPeriodId(null));
+        }
+        if (infoPaids != null) {
+            infoPaids.forEach(i -> i.setPeriodId(this));
+        }
+        this.infoPaids = infoPaids;
+    }
+
+    public Period infoPaids(Set<InfoPaid> infoPaids) {
+        this.setInfoPaids(infoPaids);
+        return this;
+    }
+
+    public Period addInfoPaid(InfoPaid infoPaid) {
+        this.infoPaids.add(infoPaid);
+        infoPaid.setPeriodId(this);
+        return this;
+    }
+
+    public Period removeInfoPaid(InfoPaid infoPaid) {
+        this.infoPaids.remove(infoPaid);
+        infoPaid.setPeriodId(null);
         return this;
     }
 

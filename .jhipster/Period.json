@@ -46,14 +46,14 @@
       "otherEntityRelationshipName": "periodId",
       "ownerSide": false,
       "relationshipName": "payId",
-      "relationshipType": "one-to-one"
+      "relationshipType": "one-to-many"
     },
     {
       "otherEntityName": "infoPaid",
       "otherEntityRelationshipName": "periodId",
       "ownerSide": false,
       "relationshipName": "infoPaid",
-      "relationshipType": "one-to-one"
+      "relationshipType": "one-to-many"
     }
   ],
   "service": "serviceImpl"

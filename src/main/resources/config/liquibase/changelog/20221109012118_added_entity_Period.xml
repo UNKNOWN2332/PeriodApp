@@ -26,9 +26,6 @@
             <column name="dates_of_period" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="info_paid" type="bigint">
-                <constraints nullable="true"/>
-            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <dropDefaultValue tableName="period" columnName="create_at" columnDataType="${datetimeType}"/>
