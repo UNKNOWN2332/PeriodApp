@@ -1,12 +1,12 @@
 package com.mycompany.myapp.service.schedule;
 
+import static com.mycompany.myapp.service.mapper.InfoTgPeriodMapper.toDto;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.repository.InfoPaidRepository;
-import com.mycompany.myapp.repository.PeriodRepository;
-import com.mycompany.myapp.repository.TelegramAccountRepository;
+import com.mycompany.myapp.service.mapper.InfoTgPeriodMapper;
 import java.time.Instant;
-import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -21,16 +21,16 @@ public class Schedule {
 
     private final ObjectMapper objectMapper;
 
-    @Scheduled(cron = "9 * * * * *")
-    public boolean selectAllQarziBorTgAccounts() {
+    @Scheduled(cron = "* * * * * *")
+    public boolean selectAllDeptTgAccounts() {
         Instant a = Instant.now().plusSeconds(18_000);
-        System.out.println(a);
         var info = infoPaidRepository.getAllDebtTelegramAccount(a);
+        var infoDto = info.stream().map(InfoTgPeriodMapper::toDto);
         try {
-            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(info));
+            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(infoDto));
+            return true;
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        return false;
     }
 }

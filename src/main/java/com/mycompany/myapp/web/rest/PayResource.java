@@ -198,4 +198,16 @@ public class PayResource {
 
         return ResponseEntity.ok().body(payService.isPaid(isPaidDTO));
     }
+
+    @PostMapping("/next-pays/{accId}")
+    public ResponseEntity<ResponsDTO<List<IsPaidDTO>>> nextPays(@PathVariable(value = "accId") final Long accId) {
+        log.debug("REST request to update Pay : {}, {}", accId);
+
+        ResponsDTO<List<IsPaidDTO>> result = payService.nextPay(accId);
+
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, accId.toString()))
+            .body(result);
+    }
 }

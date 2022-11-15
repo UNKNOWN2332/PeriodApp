@@ -14,22 +14,18 @@ import com.mycompany.myapp.service.PayService;
 import com.mycompany.myapp.service.dto.IsPaidDTO;
 import com.mycompany.myapp.service.dto.PayDTO;
 import com.mycompany.myapp.service.dto.ResponsDTO;
+import com.mycompany.myapp.service.mapper.InfoTgPeriodMapper;
 import com.mycompany.myapp.service.mapper.PayMapper;
-import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Service Implementation for managing {@link Pay}.
@@ -139,7 +135,9 @@ public class PayServiceImpl implements PayService {
                 List<Pay> resultPays = collection(isPaidDTO, period, tgAccount, infoPaid.getExpiryDate());
                 infoPaid.setExpiryDate(resultPays.get(resultPays.size() - 1).getExpiryDate());
                 payRepository.saveAll(resultPays);
+                infoPaid.setLastPayId(resultPays.get(resultPays.size() - 1).getId());
                 infoPaidRepository.save(infoPaid);
+
                 return new ResponsDTO<>(true, "Ok", "Save");
             }
 
@@ -151,7 +149,8 @@ public class PayServiceImpl implements PayService {
             pay.setAmount(isPaidDTO.getAmount() % period.getAmount());
             pay.setIsPaid(false);
             payRepository.save(pay);
-
+            infoPaid.setLastPayId(pay.getId());
+            infoPaidRepository.save(infoPaid);
             return new ResponsDTO<>(true, "Ok", "OK just not paid in full. But we will save it to the base");
         }
 
@@ -166,6 +165,19 @@ public class PayServiceImpl implements PayService {
         }
 
         return new ResponsDTO<>();
+    }
+
+    @Override
+    public ResponsDTO<List<IsPaidDTO>> nextPay(Long accId) {
+        var tgAccount = telegramAccountRepository.findById(accId).orElse(null);
+        if (tgAccount == null) return new ResponsDTO<>(false, "This Telegram account not found", null);
+
+        var nextPayProjections = infoPaidRepository.findByAccIdUZB(accId);
+        if (nextPayProjections.size() == 0) return new ResponsDTO<>(false, "You don't  to pay for anything", null);
+
+        List<IsPaidDTO> isPaidDTOS = nextPayProjections.stream().map(InfoTgPeriodMapper::toDtoIsPaid).collect(Collectors.toList());
+
+        return new ResponsDTO<>(true, "OK", isPaidDTOS);
     }
 
     private ResponsDTO<String> checkAmounts(
@@ -184,8 +196,9 @@ public class PayServiceImpl implements PayService {
         var pays = collection(isPaidDTO, period, tgAccount, payOptional.getExpiryDate());
         infoPaid.setExpiryDate(payOptional.getExpiryDate());
         if (pays.size() != 0) infoPaid.setExpiryDate(pays.get(pays.size() - 1).getExpiryDate());
-        infoPaidRepository.save(infoPaid);
         payRepository.saveAll(pays);
+        infoPaid.setLastPayId(pays.get(pays.size() - 1).getId());
+        infoPaidRepository.save(infoPaid);
         return new ResponsDTO<>(true, "OK", "OK");
     }
 }

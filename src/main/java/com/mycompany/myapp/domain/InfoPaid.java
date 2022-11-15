@@ -26,6 +26,9 @@ public class InfoPaid implements Serializable {
     @Column(name = "expiry_date")
     private Instant expiryDate;
 
+    @Column(name = "last_pay_id")
+    private Long lastPayId;
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "payIds", "groups", "infoPaids" }, allowSetters = true)
     private TelegramAccount accId;
@@ -60,6 +63,19 @@ public class InfoPaid implements Serializable {
 
     public void setExpiryDate(Instant expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    public Long getLastPayId() {
+        return this.lastPayId;
+    }
+
+    public InfoPaid lastPayId(Long lastPayId) {
+        this.setLastPayId(lastPayId);
+        return this;
+    }
+
+    public void setLastPayId(Long lastPayId) {
+        this.lastPayId = lastPayId;
     }
 
     public TelegramAccount getAccId() {
@@ -113,6 +129,7 @@ public class InfoPaid implements Serializable {
         return "InfoPaid{" +
             "id=" + getId() +
             ", expiryDate='" + getExpiryDate() + "'" +
+            ", lastPayId=" + getLastPayId() +
             "}";
     }
 }

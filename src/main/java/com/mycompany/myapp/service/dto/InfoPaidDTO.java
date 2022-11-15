@@ -13,6 +13,8 @@ public class InfoPaidDTO implements Serializable {
 
     private Instant expiryDate;
 
+    private Long lastPayId;
+
     private TelegramAccountDTO accId;
 
     private PeriodDTO periodId;
@@ -31,6 +33,14 @@ public class InfoPaidDTO implements Serializable {
 
     public void setExpiryDate(Instant expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    public Long getLastPayId() {
+        return lastPayId;
+    }
+
+    public void setLastPayId(Long lastPayId) {
+        this.lastPayId = lastPayId;
     }
 
     public TelegramAccountDTO getAccId() {
@@ -76,6 +86,7 @@ public class InfoPaidDTO implements Serializable {
         return "InfoPaidDTO{" +
             "id=" + getId() +
             ", expiryDate='" + getExpiryDate() + "'" +
+            ", lastPayId=" + getLastPayId() +
             ", accId=" + getAccId() +
             ", periodId=" + getPeriodId() +
             "}";

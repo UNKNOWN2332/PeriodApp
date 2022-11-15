@@ -37,6 +37,9 @@ class InfoPaidResourceIT {
     private static final Instant DEFAULT_EXPIRY_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_EXPIRY_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
+    private static final Long DEFAULT_LAST_PAY_ID = 1L;
+    private static final Long UPDATED_LAST_PAY_ID = 2L;
+
     private static final String ENTITY_API_URL = "/api/info-paids";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -64,7 +67,7 @@ class InfoPaidResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static InfoPaid createEntity(EntityManager em) {
-        InfoPaid infoPaid = new InfoPaid().expiryDate(DEFAULT_EXPIRY_DATE);
+        InfoPaid infoPaid = new InfoPaid().expiryDate(DEFAULT_EXPIRY_DATE).lastPayId(DEFAULT_LAST_PAY_ID);
         return infoPaid;
     }
 
@@ -75,7 +78,7 @@ class InfoPaidResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static InfoPaid createUpdatedEntity(EntityManager em) {
-        InfoPaid infoPaid = new InfoPaid().expiryDate(UPDATED_EXPIRY_DATE);
+        InfoPaid infoPaid = new InfoPaid().expiryDate(UPDATED_EXPIRY_DATE).lastPayId(UPDATED_LAST_PAY_ID);
         return infoPaid;
     }
 
@@ -104,6 +107,7 @@ class InfoPaidResourceIT {
         assertThat(infoPaidList).hasSize(databaseSizeBeforeCreate + 1);
         InfoPaid testInfoPaid = infoPaidList.get(infoPaidList.size() - 1);
         assertThat(testInfoPaid.getExpiryDate()).isEqualTo(DEFAULT_EXPIRY_DATE);
+        assertThat(testInfoPaid.getLastPayId()).isEqualTo(DEFAULT_LAST_PAY_ID);
     }
 
     @Test
@@ -142,7 +146,8 @@ class InfoPaidResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(infoPaid.getId().intValue())))
-            .andExpect(jsonPath("$.[*].expiryDate").value(hasItem(DEFAULT_EXPIRY_DATE.toString())));
+            .andExpect(jsonPath("$.[*].expiryDate").value(hasItem(DEFAULT_EXPIRY_DATE.toString())))
+            .andExpect(jsonPath("$.[*].lastPayId").value(hasItem(DEFAULT_LAST_PAY_ID.intValue())));
     }
 
     @Test
@@ -157,7 +162,8 @@ class InfoPaidResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(infoPaid.getId().intValue()))
-            .andExpect(jsonPath("$.expiryDate").value(DEFAULT_EXPIRY_DATE.toString()));
+            .andExpect(jsonPath("$.expiryDate").value(DEFAULT_EXPIRY_DATE.toString()))
+            .andExpect(jsonPath("$.lastPayId").value(DEFAULT_LAST_PAY_ID.intValue()));
     }
 
     @Test
@@ -179,7 +185,7 @@ class InfoPaidResourceIT {
         InfoPaid updatedInfoPaid = infoPaidRepository.findById(infoPaid.getId()).get();
         // Disconnect from session so that the updates on updatedInfoPaid are not directly saved in db
         em.detach(updatedInfoPaid);
-        updatedInfoPaid.expiryDate(UPDATED_EXPIRY_DATE);
+        updatedInfoPaid.expiryDate(UPDATED_EXPIRY_DATE).lastPayId(UPDATED_LAST_PAY_ID);
         InfoPaidDTO infoPaidDTO = infoPaidMapper.toDto(updatedInfoPaid);
 
         restInfoPaidMockMvc
@@ -196,6 +202,7 @@ class InfoPaidResourceIT {
         assertThat(infoPaidList).hasSize(databaseSizeBeforeUpdate);
         InfoPaid testInfoPaid = infoPaidList.get(infoPaidList.size() - 1);
         assertThat(testInfoPaid.getExpiryDate()).isEqualTo(UPDATED_EXPIRY_DATE);
+        assertThat(testInfoPaid.getLastPayId()).isEqualTo(UPDATED_LAST_PAY_ID);
     }
 
     @Test
@@ -282,6 +289,8 @@ class InfoPaidResourceIT {
         InfoPaid partialUpdatedInfoPaid = new InfoPaid();
         partialUpdatedInfoPaid.setId(infoPaid.getId());
 
+        partialUpdatedInfoPaid.lastPayId(UPDATED_LAST_PAY_ID);
+
         restInfoPaidMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedInfoPaid.getId())
@@ -296,6 +305,7 @@ class InfoPaidResourceIT {
         assertThat(infoPaidList).hasSize(databaseSizeBeforeUpdate);
         InfoPaid testInfoPaid = infoPaidList.get(infoPaidList.size() - 1);
         assertThat(testInfoPaid.getExpiryDate()).isEqualTo(DEFAULT_EXPIRY_DATE);
+        assertThat(testInfoPaid.getLastPayId()).isEqualTo(UPDATED_LAST_PAY_ID);
     }
 
     @Test
@@ -310,7 +320,7 @@ class InfoPaidResourceIT {
         InfoPaid partialUpdatedInfoPaid = new InfoPaid();
         partialUpdatedInfoPaid.setId(infoPaid.getId());
 
-        partialUpdatedInfoPaid.expiryDate(UPDATED_EXPIRY_DATE);
+        partialUpdatedInfoPaid.expiryDate(UPDATED_EXPIRY_DATE).lastPayId(UPDATED_LAST_PAY_ID);
 
         restInfoPaidMockMvc
             .perform(
@@ -326,6 +336,7 @@ class InfoPaidResourceIT {
         assertThat(infoPaidList).hasSize(databaseSizeBeforeUpdate);
         InfoPaid testInfoPaid = infoPaidList.get(infoPaidList.size() - 1);
         assertThat(testInfoPaid.getExpiryDate()).isEqualTo(UPDATED_EXPIRY_DATE);
+        assertThat(testInfoPaid.getLastPayId()).isEqualTo(UPDATED_LAST_PAY_ID);
     }
 
     @Test

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ResponsDTO<T> {
 
-    private boolean access;
+    private Boolean access;
 
     private String message;
 

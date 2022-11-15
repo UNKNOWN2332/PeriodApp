@@ -1,4 +1,4 @@
-package com.mycompany.myapp.service.dto;
+package com.mycompany.myapp.domain.projection;
 
 import com.mycompany.myapp.domain.enumeration.DatesOfPeriod;
 import com.mycompany.myapp.domain.enumeration.Role;
@@ -23,4 +23,11 @@ public interface InfoTgPeriodEntities {
     Instant getPdCreateAt();
     Double getAmount();
     DatesOfPeriod getDatesOfPeriod();
+    Long getPayId();
+    Double getPayAmount();
+    Boolean getPayIsPaid();
+    Instant getPayPaidAt();
+    Instant getPayExpiryDate();
+    Long getPayAccId();
+    Long getPayPeriodId();
 }

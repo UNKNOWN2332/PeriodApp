@@ -3,6 +3,7 @@ package com.mycompany.myapp.service;
 import com.mycompany.myapp.service.dto.IsPaidDTO;
 import com.mycompany.myapp.service.dto.PayDTO;
 import com.mycompany.myapp.service.dto.ResponsDTO;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
  * Service Interface for managing {@link com.mycompany.myapp.domain.Pay}.
  */
 public interface PayService {
+    ResponsDTO<List<IsPaidDTO>> nextPay(Long accId);
     /**
      * do paid
      * @param isPaidDTO
